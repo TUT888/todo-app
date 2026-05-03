@@ -40,7 +40,7 @@ const updateTask = (req, res) => {
   const id = req.params.id;
   const data = req.body;
 
-  Task.findByIdAndUpdate({ _id: id }, { ...data })
+  Task.findByIdAndUpdate(id, data, { returnDocument: "after" })
     .then((result) => {
       res.status(200).json(result);
     })
