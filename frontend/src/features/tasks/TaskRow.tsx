@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Stack,
   Checkbox,
@@ -17,7 +17,23 @@ export function TaskRow({ task }: { task: Task }) {
   // Manage temporary title while editing -> revert to original when new title is not valid
   const [editedTitle, setEditedTitle] = useState({ title: task.title, valid: true });
   const [isEditable, setEditable] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Cancel edit task when clicking outside of current text field
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      // Check if target is actually an instance of a Node
+      // And if the current input ref is not null, we check if it contains our input text box
+      // If not, which means we are clicking outside, then set the editable to false
+      if (event.target instanceof Node && !inputRef.current?.contains(event.target)) {
+        setEditable(false);
+      }
+    };
 
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isEditable]);
+  
   // Reset the edited title and allow making changes
   const triggerEditable = () => {
     setEditedTitle({ title: task.title, valid: true });
@@ -94,6 +110,7 @@ export function TaskRow({ task }: { task: Task }) {
           fullWidth
           variant="standard"
           onKeyDown={handleConfirmTitleChange}
+          inputRef={inputRef}
           value={editedTitle.title}
           onChange={handleTitleChange}
         />
