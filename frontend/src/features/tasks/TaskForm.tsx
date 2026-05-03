@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { TextField, Button, Stack } from "@mui/material";
+import { useAppDispatch } from "../../app/hooks";
+import { addTask } from "./taskSlice";
 
-interface TaskFormProps {
-  onAddTask: (title: string) => void;
-}
-
-export function TaskForm({ onAddTask }: TaskFormProps) {
+export function TaskForm() {
+  const dispatch = useAppDispatch();
+  
+  // Manage temporary title while editing
   const [title, setTitle] = useState("");
   const [valid, setValid] = useState(false);
 
@@ -15,7 +16,7 @@ export function TaskForm({ onAddTask }: TaskFormProps) {
   };
 
   const handleConfirmAdd = () => {
-    onAddTask(title);
+    dispatch(addTask(title));
     setTitle("");
     setValid(false);
   };
@@ -35,5 +36,3 @@ export function TaskForm({ onAddTask }: TaskFormProps) {
     </Stack>
   );
 }
-
-export default TaskForm;

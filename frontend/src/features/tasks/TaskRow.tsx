@@ -8,14 +8,12 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import type { Task } from "../../types/task.type";
+import { useAppDispatch } from "../../app/hooks";
+import { deleteTaskById, updateTaskById } from "./taskSlice";
 
-interface TaskRowProps {
-  task: Task;
-  onUpdateTask: (id: string, updatedTask: Task) => void;
-  onDeleteTask: (id: string) => void;
-}
+export function TaskRow({ task }: { task: Task }) {
+  const dispatch = useAppDispatch()
 
-export function TaskRow({ task, onUpdateTask, onDeleteTask }: TaskRowProps) {
   // Manage temporary title while editing -> revert to original when new title is not valid
   const [editedTitle, setEditedTitle] = useState({ title: task.title, valid: true });
   const [isEditable, setEditable] = useState(false);
@@ -36,10 +34,13 @@ export function TaskRow({ task, onUpdateTask, onDeleteTask }: TaskRowProps) {
 
   // Confirm edit (make changes to database)
   const handleConfirmStatusChange = () => {
-    onUpdateTask(task._id, {
-      ...task,
-      isCompleted: !task.isCompleted,
-    });
+    dispatch(updateTaskById({
+      id: task._id,
+      updatedTask: {
+        ...task,
+        isCompleted: !task.isCompleted,
+      }
+    }));
   };
 
   const handleConfirmTitleChange = (event: React.KeyboardEvent) => {
@@ -52,17 +53,20 @@ export function TaskRow({ task, onUpdateTask, onDeleteTask }: TaskRowProps) {
         alert("Changes are not valid! Please try again!");
         return;
       }
-
-      onUpdateTask(task._id, {
-        ...task,
-        title: editedTitle.title,
-      });
+      
+      dispatch(updateTaskById({
+        id: task._id,
+        updatedTask: {
+          ...task,
+          title: editedTitle.title,
+        }
+      }));
     }
   };
 
   // Confirm delete (make changes to database)
   const handleConfirmDelete = () => {
-    onDeleteTask(task._id);
+    dispatch(deleteTaskById(task._id));;
   };
   
   return (
@@ -114,5 +118,3 @@ export function TaskRow({ task, onUpdateTask, onDeleteTask }: TaskRowProps) {
     </Stack>
   );
 }
-
-export default TaskRow;
