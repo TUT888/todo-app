@@ -1,16 +1,20 @@
 # Todo App
 
-A Todo List application built with the **MERN Stack** (MongoDB, Express, React, Node.js).
+A full-stack Todo List application built with the **MERN Stack** (MongoDB, Express, React, Node.js). It uses **Redux Toolkit** for smooth state management and **Material UI v7** for a clean, professional design.
 
 ![image.png](image.png)
 
 ## About the Project
-### Tech Stack
-- **Frontend**: Vite + TypeScript + React Compiler, Redux Toolkit, Material UI v7
-- **Backend**: Express, Mongoose
-
 ### Features
-- CRUD: View, add, edit, delete, mark tasks as complete/incomplete
+CRUD Operations
+- Create: Add new tasks with validation (prevents empty entries).
+- Read:  View all tasks, including completed ones.
+- Update: Modify task titles or toggle status between complete and incomplete. Includes a "click-outside" listener to cancel active editing.
+- Delete: Permanently remove tasks from the system.
+
+Filter & Search
+- Search: Find specific tasks by title (case insensitive and partial-match suppported).
+- Filter: Filter tasks by status (options include All, To-do, and Completed).
 
 ### Origin
 This project represents an **evolved version** of my earlier works, it consolidates the core features and technical patterns developed across my previous repositories into a single application:
