@@ -21,8 +21,8 @@ const initialState: TaskState = {
 };
 
 // ------ Async Thunks ------ //
-export const fetchAllTask = createAsyncThunk("tasks/fetchAll", async () => {
-  const response = await axios.get(`${backendURL}/api/tasks`);
+export const fetchAllTask = createAsyncThunk("tasks/fetchAll", async (query: string) => {
+  const response = await axios.get(`${backendURL}/api/tasks${query}`);
   return response.data;
 });
 

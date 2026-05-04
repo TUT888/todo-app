@@ -1,7 +1,23 @@
 const Task = require("../models/Task");
 
 const getAllTasks = (req, res) => {
-  Task.find()
+  const { keyword, status } = req.query;
+  const query = {};
+
+  if (keyword) {
+    query.title = {
+      $regex: keyword,
+      $options: 'i'
+    }
+  }
+
+  if (status === "completed") {
+    query.isCompleted = true;
+  } else if (status === "todo" ) {
+    query.isCompleted = false;
+  }
+
+  Task.find(query)
     .then((result) => {
       res.status(200).json(result);
     })
