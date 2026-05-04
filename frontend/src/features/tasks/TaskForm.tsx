@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TextField, Button, Stack } from "@mui/material";
+import { TextField, Button, Stack, Box } from "@mui/material";
 import { useAppDispatch } from "../../app/hooks";
 import { addTask } from "./taskSlice";
 
@@ -15,24 +15,28 @@ export function TaskForm() {
     setTitle(event.target.value);
   };
 
-  const handleConfirmAdd = () => {
+  const handleConfirmAdd = (event: React.SubmitEvent) => {
+    event.preventDefault();
+
     dispatch(addTask(title));
     setTitle("");
     setValid(false);
   };
   
   return (
-    <Stack direction="row" spacing={2}>
-      <TextField
-        fullWidth
-        variant="outlined"
-        label="What needs to be done?"
-        value={title}
-        onChange={handleDataChange}
-      />
-      <Button size="large" variant="contained" onClick={handleConfirmAdd} disabled={!valid}>
-        Add
-      </Button>
-    </Stack>
+    <Box component="form" onSubmit={handleConfirmAdd}>
+      <Stack direction="row" spacing={2}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          label="What needs to be done?"
+          value={title}
+          onChange={handleDataChange}
+        />
+        <Button type="submit" size="large" variant="contained" disabled={!valid}>
+          Add
+        </Button>
+      </Stack>
+    </Box>
   );
 }
