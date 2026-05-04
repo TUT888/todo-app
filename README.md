@@ -13,7 +13,7 @@ CRUD Operations
 - Delete: Permanently remove tasks from the system.
 
 Filter & Search
-- Search: Find specific tasks by title (case insensitive and partial-match suppported).
+- Search: Title search with 500ms debounce to minimize API overhead (case-insensitive and partial-match supported)
 - Filter: Filter tasks by status (options include All, To-do, and Completed).
 
 ### Origin
