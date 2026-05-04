@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Param {
   keyword: string;
   status: string;
 }
 
-export function useTaskSearch() {
-  const [params, setParams] = useState<Param>({
-    keyword: "",
-    status: "all",
-  });
+export function useTaskSearch(debounceTime: number = 500) {
+  const [params, setParams] = useState<Param>({ keyword: "", status: "all" });
+  const [debounceQuery, setDebounceQuery] = useState("");
+
+  // When param hasn't been changed for a while, set debounce to trigger the search
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const pairs = Object.entries(params).map(
+        ([key, value]) => `${key}=${value}`
+      );
+      setDebounceQuery(`?${pairs.join("&")}`);
+    }, debounceTime);
+    return () => clearTimeout(id);
+  }, [debounceTime, params]);
 
   const clearParam = () => {
     setParams({
@@ -25,12 +34,5 @@ export function useTaskSearch() {
     }));
   };
 
-  const getQueryString = () => {
-    const pairs = Object.entries(params).map(
-      ([key, value]) => `${key}=${value}`,
-    );
-    return `?${pairs.join("&")}`;
-  };
-
-  return [params, clearParam, updateParam, getQueryString] as const;
+  return [params, debounceQuery, clearParam, updateParam] as const;
 }

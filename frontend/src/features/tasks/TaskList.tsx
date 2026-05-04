@@ -10,13 +10,12 @@ export function TaskList() {
   const dispatch = useAppDispatch();
 
   // Searching
-  const [params, clearParam, updateParam, getQueryString] = useTaskSearch();
+  const [params, debounceQuery, clearParam, updateParam] = useTaskSearch();
 
   useEffect(() => {
-    const queryString = getQueryString();
-    dispatch(fetchAllTask(queryString));
-  }, [dispatch, getQueryString, params]);
-
+    dispatch(fetchAllTask(debounceQuery));
+  }, [dispatch, debounceQuery]);
+  
   return (
     <>
     
